@@ -1,7 +1,7 @@
 import type { Prediction } from '../lib/tickets'
 import { LABELS, isLabel, type Label } from '../lib/types'
 
-const BASE = import.meta.env.VITE_API_URL?.replace(/\/+$/, '')
+const BASE = __API_URL__.replace(/\/+$/, '')
 
 const REQUEST_TIMEOUT_MS = 35_000 // the Worker itself waits up to 25 s for the container
 const RETRY_DELAY_MS = 5_000
@@ -38,7 +38,7 @@ function parsePredictions(data: unknown, expected: number): Prediction[] {
 // so we wait and try again (and tell the UI via onWarmingUp).
 export async function classifyMessages(messages: string[], onWarmingUp: () => void): Promise<Prediction[]> {
   if (!BASE) {
-    throw new ApiError('VITE_API_URL is not set. Add it to .env.local and restart npm run dev.')
+    throw new ApiError('API_URL is not set. Locally: add it to .env.local and restart npm run dev. On Vercel: add the variable and redeploy.')
   }
   const deadline = Date.now() + WAIT_LIMIT_MS
 
